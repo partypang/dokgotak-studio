@@ -1,10 +1,20 @@
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
-import hostingConfig from "./.openai/hosting.json";
+import { existsSync, readFileSync } from "node:fs";
+
+type HostingConfig = {
+  d1?: string | null;
+  r2?: string | null;
+};
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
+
+const hostingConfigPath = new URL("./.openai/hosting.json", import.meta.url);
+const hostingConfig = existsSync(hostingConfigPath)
+  ? (JSON.parse(readFileSync(hostingConfigPath, "utf8")) as HostingConfig)
+  : ({ d1: null, r2: null } satisfies HostingConfig);
 
 const { d1, r2 } = hostingConfig;
 
