@@ -1,5 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css");
-@import "tailwindcss";
+@import "tailwindcss/index.css";
 
 :root {
   --background: #f6f3ec;

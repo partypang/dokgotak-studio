@@ -40,12 +40,24 @@ const localBindingConfig = {
     : [],
 };
 
-export default defineConfig({
-  plugins: [
-    vinext(),
-    cloudflare({
-      viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-      config: localBindingConfig,
-    }),
-  ],
+export default defineConfig(async () => {
+  const isVercelBuild = process.env.VERCEL === "1" || Boolean(process.env.NITRO_PRESET);
+
+  if (isVercelBuild) {
+    const { nitro } = await import("nitro/vite");
+
+    return {
+      plugins: [vinext(), nitro()],
+    };
+  }
+
+  return {
+    plugins: [
+      vinext(),
+      cloudflare({
+        viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+        config: localBindingConfig,
+      }),
+    ],
+  };
 });
